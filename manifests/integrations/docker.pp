@@ -12,11 +12,31 @@
 #   }
 #
 class datadog_agent::integrations::docker(
-  $tags      = []
+  $docker_root             = '/',
+  $socket_timeout          = 5,
+  $url                     = "unix://var/run/docker.sock",
+  $new_tag_names           = true,
+  $tag_by_command          = false,
+  $tags                    = [],
+  $include                 = [],
+  $exclude                 = [],
+  $collect_events          = true,
+  $collect_container_size  = false,
+  $collect_all_metrics     = false
 ) inherits datadog_agent::params {
 
+  validate_string($docker_root)
+  validate_re('^\d+$', $socket_timeout)
+  validate_string($url)
+  validate_bool($new_tag_names)
+  validata_bool($tag_by_command)
   validate_array($tags)
-
+  validate_array($include)
+  validate_array($exclude)
+  validate_bool($collect_events)
+  validate_bool($collect_container_size)
+  validate_bool($collect_all_metrics)
+  
   file { "${datadog_agent::params::conf_dir}/docker.yaml":
     ensure  => file,
     owner   => $datadog_agent::params::dd_user,
