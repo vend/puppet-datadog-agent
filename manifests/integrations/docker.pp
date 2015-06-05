@@ -18,8 +18,8 @@ class datadog_agent::integrations::docker(
   $new_tag_names           = true,
   $tag_by_command          = false,
   $tags                    = [],
-  $include                 = [],
-  $exclude                 = [],
+  $include_list            = [],
+  $exclude_list            = [],
   $collect_events          = true,
   $collect_container_size  = false,
   $collect_all_metrics     = false

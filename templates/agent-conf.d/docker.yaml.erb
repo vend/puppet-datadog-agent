@@ -66,9 +66,9 @@ instances:
       #   - "image:debian"
       #
       #include: []
-<% if @include and ! @include.empty? -%>
+<% if @include_list and ! @include_list.empty? -%>
         include:
-  <%- Array(@include).each do |incl| -%>
+  <%- Array(@include_list).each do |incl| -%>
     <%- if incl != '' -%>
             - "<%= incl %>"
     <%- end -%>
@@ -76,9 +76,9 @@ instances:
 <% end -%>
 
 #exclude: []
-<% if @exclude and ! @exclude.empty? -%>
+<% if @exclude_list and ! @exclude_list.empty? -%>
         exclude:
-  <%- Array(@exclude).each do |excl| -%>
+  <%- Array(@exclude_list).each do |excl| -%>
     <%- if excl != '' -%>
             - "<%= excl %>"
     <%- end -%>
