@@ -11,23 +11,23 @@ init_config:
     # Example for the docker-dd-agent container:
     # docker_root: /host
     #
-    #docker_root: /
+    docker_root: <%= @docker_root %>
 
     # Timeout on Docker socket connection. You may have to increase it if you have many containers.
     #
-    #socket_timeout: 5
+    socket_timeout: <%= @socket_timeout %>
 
 instances:
       # URL of the Docker daemon socket to reach the Docker API. HTTP also works.
       #
-    - url: "unix://var/run/docker.sock"
+    - url: <%= @url %>
 
       # Use tag names that don't conflict.
       # Keep it false if you have old dashboard using the old tag names. Default: false.
-      new_tag_names: true
+      new_tag_names: <%= @new_tag_names %>
 
       # Tag metrics with the command running inside the container.
-      #tag_by_command: false
+      tag_by_command: <%= @tag_by_command %>
 
       # You can add extra tags to your Docker metrics with the tags list option. Default: [].
       # Examples:
@@ -66,18 +66,36 @@ instances:
       #   - "image:debian"
       #
       #include: []
-      #exclude: []
+<% if @include_list and ! @include_list.empty? -%>
+        include:
+  <%- Array(@include_list).each do |incl| -%>
+    <%- if incl != '' -%>
+            - "<%= incl %>"
+    <%- end -%>
+  <%- end -%>
+<% end -%>
+
+#exclude: []
+<% if @exclude_list and ! @exclude_list.empty? -%>
+        exclude:
+  <%- Array(@exclude_list).each do |excl| -%>
+    <%- if excl != '' -%>
+            - "<%= excl %>"
+    <%- end -%>
+  <%- end -%>
+<% end -%>
 
       # Create events whenever a container status change.
       #
-      #collect_events: true
+      collect_events: <%= @collect_events %>
 
       # Collect disk usage per container with docker.disk.size metric.
       # Warning: Some bugs in Docker (especially Docker 1.2) can break it, use with caution.
       #
-      #collect_container_size: false
+      collect_container_size: <%= @collect_container_size %>
 
       # Collect uncommon metrics from cgroups.
       # Collect all the available cgroups metrics. All the relevant metrics are collected by default.
       #
-      #collect_all_metrics: false
+      collect_all_metrics: <%= @collect_all_metrics %>
+
