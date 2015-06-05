@@ -29,7 +29,7 @@ class datadog_agent::integrations::docker(
   validate_re($socket_timeout, '^\d+$')
   validate_string($url)
   validate_bool($new_tag_names)
-  validata_bool($tag_by_command)
+  validate_bool($tag_by_command)
   validate_array($tags)
   validate_array($include)
   validate_array($exclude)
