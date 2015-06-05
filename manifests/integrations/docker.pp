@@ -26,7 +26,7 @@ class datadog_agent::integrations::docker(
 ) inherits datadog_agent::params {
 
   validate_string($docker_root)
-  validate_re('^\d+$', $socket_timeout)
+  validate_re($socket_timeout, '^\d+$')
   validate_string($url)
   validate_bool($new_tag_names)
   validata_bool($tag_by_command)
