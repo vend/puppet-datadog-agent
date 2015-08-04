@@ -82,7 +82,8 @@ class datadog_agent(
   $proxy_user = '',
   $proxy_password = '',
   $ganglia_host = '',
-  $ganglia_port = 8651
+  $ganglia_port = 8651,
+  $bind_host = "localhost"
 ) inherits datadog_agent::params {
 
   validate_string($dd_url)
