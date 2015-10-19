@@ -82,7 +82,11 @@ use_mount: <%= @use_mount %>
 # listen_port: 17123
 
 # Start a graphite listener on this port
+<% if @graphite_listen_port.empty? -%>
 # graphite_listen_port: 17124
+<% else -%>
+graphite_listen_port: <%= @graphite_listen_port %>
+<% end -%>
 
 # Additional directory to look for Datadog checks
 # additional_checksd: /etc/dd-agent/checks.d/
@@ -212,6 +216,11 @@ ganglia_port: <%= @ganglia_port %>
 # If this value isn't specified, the default parser assumes this log format:
 #     metric timestamp value key0=val0 key1=val1 ...
 #
+<%
+if not @dogstreams.empty?
+-%>
+dogstreams: <%= dogstreams.join(', ') %>
+<% end -%>
 
 # ========================================================================== #
 # Custom Emitters                                                            #
@@ -244,3 +253,9 @@ log_level: <%= @_loglevel %>
 log_to_syslog: <%= @log_to_syslog ? "yes" : "no" %>
 # syslog_host:
 # syslog_port:
+<% if not @extra_template.empty? -%>
+# ========================================================================== #
+# Custom Templates from Puppet                                               #
+# ========================================================================== #
+
+<% end -%>

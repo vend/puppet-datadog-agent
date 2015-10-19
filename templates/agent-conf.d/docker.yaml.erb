@@ -2,100 +2,16 @@
 # MANAGED BY PUPPET
 #
 
-# Warning
-# The user running the Datadog Agent (usually "dd-agent") must be part of the "docker" group
-
 init_config:
-    # Change the root directory to look at to get cgroup statistics. Useful when running inside a
-    # container with host directories mounted on a different folder. Default: /.
-    # Example for the docker-dd-agent container:
-    # docker_root: /host
-    #
-    docker_root: <%= @docker_root %>
-
-    # Timeout on Docker socket connection. You may have to increase it if you have many containers.
-    #
-    socket_timeout: <%= @socket_timeout %>
 
 instances:
-      # URL of the Docker daemon socket to reach the Docker API. HTTP also works.
-      #
-    - url: <%= @url %>
-
-      # Use tag names that don't conflict.
-      # Keep it false if you have old dashboard using the old tag names. Default: false.
-      new_tag_names: <%= @new_tag_names %>
-
-      # Tag metrics with the command running inside the container.
-      tag_by_command: <%= @tag_by_command %>
-
-      # You can add extra tags to your Docker metrics with the tags list option. Default: [].
-      # Examples:
-      # tags: ["extra_tag", "env:example"]
-      #
-      #tags: []
+  - url: <%= @url %>
+    new_tag_names: <%= @new_tag_names %>
 <% if @tags and ! @tags.empty? -%>
-        tags:
+    tags:
   <%- Array(@tags).each do |tag| -%>
     <%- if tag != '' -%>
-            - <%= tag %>
+      - <%= tag %>
     <%- end -%>
   <%- end -%>
 <% end -%>
-
-
-
-      # To include or exclude containers based on their tags, use the include and
-      # exclude keys in your instance.
-      # The reasoning is: if a tag matches an exclude rule, it won't be included
-      # unless it also matches an include rule.
-      #
-      # Examples:
-      #
-      # exclude all, except ubuntu and debian.
-      # include:
-      #   - "image:ubuntu"
-      #   - "image:debian"
-      # exclude:
-      #   - ".*"
-      #
-      # include all, except ubuntu and debian.
-      # include: []
-      # exclude:
-      #   - "image:ubuntu"
-      #   - "image:debian"
-      #
-      #include: []
-<% if @include_list and ! @include_list.empty? -%>
-        include:
-  <%- Array(@include_list).each do |incl| -%>
-    <%- if incl != '' -%>
-            - "<%= incl %>"
-    <%- end -%>
-  <%- end -%>
-<% end -%>
-
-#exclude: []
-<% if @exclude_list and ! @exclude_list.empty? -%>
-        exclude:
-  <%- Array(@exclude_list).each do |excl| -%>
-    <%- if excl != '' -%>
-            - "<%= excl %>"
-    <%- end -%>
-  <%- end -%>
-<% end -%>
-
-      # Create events whenever a container status change.
-      #
-      collect_events: <%= @collect_events %>
-
-      # Collect disk usage per container with docker.disk.size metric.
-      # Warning: Some bugs in Docker (especially Docker 1.2) can break it, use with caution.
-      #
-      collect_container_size: <%= @collect_container_size %>
-
-      # Collect uncommon metrics from cgroups.
-      # Collect all the available cgroups metrics. All the relevant metrics are collected by default.
-      #
-      collect_all_metrics: <%= @collect_all_metrics %>
-

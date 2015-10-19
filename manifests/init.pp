@@ -26,6 +26,9 @@
 #   $non_local_traffic
 #       Enable you to use the agent as a proxy. Defaults to false.
 #       See https://github.com/DataDog/dd-agent/wiki/Proxy-Configuration
+#   $dogstreams
+#       Optional array of logs to parse and custom parsers to use.
+#       See https://github.com/DataDog/dd-agent/blob/ed5e698/datadog.conf.example#L149-L178
 #   $log_level
 #       Set value of 'log_level' variable. Default is 'info' as in dd-agent.
 #       Valid values here are: critical, debug, error, fatal, info, warn and warning.
@@ -43,6 +46,11 @@
 #       Set value of 'proxy_user' variable. Default is blank.
 #   $proxy_password
 #       Set value of 'proxy_password' variable. Default is blank.
+#   $graphite_listen_port
+#       Set graphite listener port
+#   $extra_template
+#       Optional, append this extra template file at the end of
+#       the default datadog.conf template
 # Actions:
 #
 # Requires:
@@ -72,6 +80,7 @@ class datadog_agent(
   $puppet_run_reports = false,
   $puppetmaster_user = 'puppet',
   $non_local_traffic = false,
+  $dogstreams = [],
   $log_level = 'info',
   $log_to_syslog = true,
   $service_ensure = 'running',
@@ -81,15 +90,18 @@ class datadog_agent(
   $proxy_port = '',
   $proxy_user = '',
   $proxy_password = '',
+  $bind_host = 'localhost',
+  $graphite_listen_port = '',
+  $extra_template = '',
   $ganglia_host = '',
-  $ganglia_port = 8651,
-  $bind_host = 'localhost'
+  $ganglia_port = 8651
 ) inherits datadog_agent::params {
 
   validate_string($dd_url)
   validate_string($host)
   validate_string($api_key)
   validate_array($tags)
+  validate_array($dogstreams)
   validate_array($facts_to_tags)
   validate_bool($puppet_run_reports)
   validate_string($puppetmaster_user)
@@ -100,10 +112,11 @@ class datadog_agent(
   validate_string($proxy_port)
   validate_string($proxy_user)
   validate_string($proxy_password)
+  validate_string($bind_host)
+  validate_string($graphite_listen_port)
+  validate_string($extra_template)
   validate_string($ganglia_host)
   validate_integer($ganglia_port)
-  validate_string($bind_host)
-
 
   include datadog_agent::params
   case upcase($log_level) {
@@ -132,9 +145,18 @@ class datadog_agent(
   }
 
   # main agent config file
+  # content
+  if ($extra_template != '') {
+    $agent_conf_content = template(
+      'datadog_agent/datadog.conf.erb',
+      $extra_template
+    )
+  } else {
+    $agent_conf_content = template('datadog_agent/datadog.conf.erb')
+  }
   file { '/etc/dd-agent/datadog.conf':
     ensure  => file,
-    content => template('datadog_agent/datadog.conf.erb'),
+    content => $agent_conf_content,
     owner   => $datadog_agent::params::dd_user,
     group   => $datadog_agent::params::dd_group,
     mode    => '0640',

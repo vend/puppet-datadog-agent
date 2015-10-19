@@ -160,15 +160,21 @@ Verify on Datadog
 
 Go to [the Setup page](https://app.datadoghq.com/account/settings#integrations) and you should see this
 
+![Puppet integration tile][puppet-integration-tile]
+
+If you click on the tile, you may reconfirm it's been automatically installed.
+
 ![Puppet integration][puppet-integration]
 
-[puppet-integration]: https://img.skitch.com/20120419-hdd7e9fuxhgeei8y5yr7hyt8e.png
+[puppet-integration-tile]: https://raw.githubusercontent.com/DataDog/documentation/master/content/integrations/images/snapshot_puppet_tile.png
+
+[puppet-integration]: https://raw.githubusercontent.com/DataDog/documentation/master/content/integrations/images/snapshot_puppet_integration.png
 
 Search for "Puppet" in the Stream and you should see something like this:
 
 ![Puppet Events in Datadog][puppet-events]
 
-[puppet-events]: https://img.skitch.com/20120403-bdipicbpquwccwxm2u3cwdc6ar.png
+[puppet-events]: https://raw.githubusercontent.com/DataDog/documentation/master/content/integrations/images/snapshot_puppet_events.png
 
 Masterless puppet
 =================
@@ -178,16 +184,31 @@ This is a specific setup, you can use https://gist.github.com/LeoCavaille/cd412c
 Module Development and Testing
 ==============================
 
-Checkout module
+### Clone the repo
+
+```
+git clone git@github.com:DataDog/puppet-datadog-agent.git
+cd puppet-datadog-agent
+```
+
+### Install dependencies
 
 ```
 bundle install
-```
-
-```
 rake lint              # Check puppet manifests with puppet-lint / Run puppet-lint
 rake spec              # Run spec tests in a clean fixtures directory
 rake syntax            # Syntax check Puppet manifests and templates
 rake syntax:manifests  # Syntax check Puppet manifests
 rake syntax:templates  # Syntax check Puppet templates
+pip install pre-commit
+pre-commit install
 ```
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+

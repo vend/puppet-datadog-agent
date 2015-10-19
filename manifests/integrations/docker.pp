@@ -3,40 +3,28 @@
 # This class will install the necessary configuration for the docker integration
 #
 # Parameters:
-#   $tags
-#       Optional array of tags
+#   $new_tag_names:
+#     Update docker new tags
+#
+#   $url:
+#     The URL for docker API
+#
+#   $tags:
+#     optional array of tags
 #
 # Sample Usage:
 #
 #   class { 'datadog_agent::integrations::docker' :
+#     new_tag_names => true,
+#     url           => 'unix://var/run/docker.sock',
 #   }
 #
 class datadog_agent::integrations::docker(
-  $docker_root             = '/',
-  $socket_timeout          = 5,
-  $url                     = "unix://var/run/docker.sock",
-  $new_tag_names           = true,
-  $tag_by_command          = false,
-  $tags                    = [],
-  $include_list            = [],
-  $exclude_list            = [],
-  $collect_events          = true,
-  $collect_container_size  = false,
-  $collect_all_metrics     = false
+  $new_tag_names = true,
+  $url = 'unix://var/run/docker.sock',
+  $tags = [],
 ) inherits datadog_agent::params {
 
-  validate_string($docker_root)
-  validate_re($socket_timeout, '^\d+$')
-  validate_string($url)
-  validate_bool($new_tag_names)
-  validate_bool($tag_by_command)
-  validate_array($tags)
-  validate_array($include_list)
-  validate_array($exclude_list)
-  validate_bool($collect_events)
-  validate_bool($collect_container_size)
-  validate_bool($collect_all_metrics)
-  
   file { "${datadog_agent::params::conf_dir}/docker.yaml":
     ensure  => file,
     owner   => $datadog_agent::params::dd_user,
