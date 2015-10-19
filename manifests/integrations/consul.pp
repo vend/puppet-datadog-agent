@@ -39,8 +39,8 @@ class datadog_agent::integrations::consul (
 ) inherits datadog_agent::params {
 
   validate_string($url)
-  validate_boolean($catalog_checks)
-  validate_boolean($new_leader_checks)
+  validate_bool($catalog_checks)
+  validate_bool($new_leader_checks)
   validate_array($service_whitelist)
 
   file { "${datadog_agent::params::conf_dir}/consul.yaml":
