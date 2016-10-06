@@ -231,7 +231,7 @@ class datadog_agent(
   $service_discovery_backend = '',
   $sd_config_backend = '',
   $sd_backend_host = '',
-  $sd_backend_port = '',
+  $sd_backend_port = 0,
   $sd_template_dir = '',
   $consul_token = ''
 ) inherits datadog_agent::params {
