@@ -372,7 +372,7 @@ sd_config_backend: <%= @sd_config_backend %>
 <% else -%>
 sd_backend_host: <%= @sd_backend_host %>
 <% end -%>
-<% if @sd_backend_port.to_i > 0 -%>
+<% if @sd_backend_port.to_i < 1 -%>
 # sd_backend_port: 4001
 <% else -%>
 sd_backend_port: <%= @sd_backend_port %>
