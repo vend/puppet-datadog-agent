@@ -33,11 +33,6 @@ class datadog_agent::ubuntu(
     require => Package['apt-transport-https'],
   }
 
-  exec { 'datadog_apt-get_update':
-    command     => '/usr/bin/apt-get update',
-    refreshonly => true,
-  }
-
   package { 'datadog-agent-base':
     ensure => absent,
     before => Package['datadog-agent'],
