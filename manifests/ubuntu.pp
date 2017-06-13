@@ -29,6 +29,7 @@ class datadog_agent::ubuntu(
     source  => 'puppet:///modules/datadog_agent/datadog.list',
     owner   => 'root',
     group   => 'root',
+    replace => 'no',
     notify  => Exec['datadog_apt-get_update'],
     require => Package['apt-transport-https'],
   }
@@ -45,8 +46,7 @@ class datadog_agent::ubuntu(
 
   package { 'datadog-agent':
     ensure  => $agent_version,
-    require => [File['/etc/apt/sources.list.d/datadog.list'],
-                Exec['datadog_apt-get_update']],
+    require => [File['/etc/apt/sources.list.d/datadog.list']],
   }
 
   service { 'datadog-agent':
